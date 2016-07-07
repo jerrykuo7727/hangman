@@ -65,18 +65,22 @@ class Hangman
 
   def load
     size = Dir["savedata/*.yaml"].size.to_s
-    id = '-1'
-    until ('1'..size).include?(id)
-      print "There are #{size} savedatas, which one: "
-      id = gets.chomp
-      puts "Invalid number! Try again." unless ('1'..size).include?(id)
+    if size == '0'
+      puts "No savedata found!"
+    else
+      id = '-1'
+      until ('1'..size).include?(id)
+        print "There are #{size} savedatas, which one: "
+        id = gets.chomp
+        puts "Invalid number! Try again." unless ('1'..size).include?(id)
+      end
+      savedata = File.open("savedata/savedata#{id}.yaml", 'r') { |file| file.read }
+      data = YAML.load(savedata)
+      @answer = data[:answer]
+      @guesses_left = data[:guesses_left]
+      @guess = data[:guess]
+      @guessed_characters = data[:guessed_characters]
     end
-    savedata = File.open("savedata/savedata#{id}.yaml", 'r') { |file| file.read }
-    data = YAML.load(savedata)
-    @answer = data[:answer]
-    @guesses_left = data[:guesses_left]
-    @guess = data[:guess]
-    @guessed_characters = data[:guessed_characters]
   end
 
   def delete
@@ -124,8 +128,14 @@ class Hangman
   end
 end
 
+puts "***********************************"
+puts "* Hangman: guess the secret word! *"
+puts "*   # Below is the command list   *"
+puts "*     'save', 'load', 'delete'    *"
+puts "***********************************"
 restart = 'y'
 while restart == 'y' do
   hangman = Hangman.new
   restart = hangman.start
 end
+puts "Thank you for playing, bye-bye!"
