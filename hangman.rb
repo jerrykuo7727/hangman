@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Hangman
   attr_reader :answer, :guesses_left
   def initialize
@@ -7,27 +9,16 @@ class Hangman
     @guessed_characters = []
   end
 
-  def display
-    puts "#{@guess.join(' ')}" << " (#{@guesses_left.to_s} guesses left)"
-    puts "Past guesses: #{@guessed_characters.join(' ')}"
-  end
-
   def start
     until gameover?
       ask_to_guess
     end
-  end
-
-  def ask_to_guess
-    input = '0'
-    until valid_guess?(input) do
-      display
-      input = random_guess.downcase
-      puts "Please enter a character: #{input}"
-      puts "Invalid or duplicate guess! Try again." unless valid_guess?(input)
-      puts
+    input = nil
+    until %w(y n).include?(input) do
+      print "Start another game?[Y/N]"
+      input = gets.chomp.downcase
     end
-    guess(input)
+    return input
   end
 
   private
@@ -36,6 +27,60 @@ class Hangman
     File.open('dictionary.txt', 'r') do |file|
       file.readlines.select{ |word| word.length.between?(6, 13) }.sample.chomp.split('')
     end
+  end
+
+  def ask_to_guess
+    input = '0'
+    until valid_guess?(input) do
+      display
+      print "Please enter a character: #{input}"
+      input = gets.chomp.downcase
+      case input
+      when 'save'
+        save
+      when 'load'
+        load
+      when 'delete'
+        delete
+      else
+        puts "Invalid or duplicate guess! Try again." unless valid_guess?(input)
+      end
+      puts
+    end
+    guess(input)
+  end
+
+  def save
+    Dir.mkdir('savedata') unless Dir.exist?('savedata')
+    data = {
+      answer: @answer,
+      guesses_left: @guesses_left,
+      guess: @guess,
+      guessed_characters: @guessed_characters
+    }
+    id = Dir["savedata/*.yaml"].size + 1
+    savedata = YAML.dump(data)
+    File.open("savedata/savedata#{id}.yaml", 'w') { |file| file.write(savedata) }
+  end
+
+  def load
+    size = Dir["savedata/*.yaml"].size.to_s
+    id = '-1'
+    until ('1'..size).include?(id)
+      print "There are #{size} savedatas, which one: "
+      id = gets.chomp
+      puts "Invalid number! Try again." unless ('1'..size).include?(id)
+    end
+    savedata = File.open("savedata/savedata#{id}.yaml", 'r') { |file| file.read }
+    data = YAML.load(savedata)
+    @answer = data[:answer]
+    @guesses_left = data[:guesses_left]
+    @guess = data[:guess]
+    @guessed_characters = data[:guessed_characters]
+  end
+
+  def delete
+    Dir["savedata/*.yaml"].each { |filepath| File.delete(filepath)}
   end
 
   def valid_guess?(input)
@@ -65,18 +110,22 @@ class Hangman
 
   def win
     puts "You win the game!"
+    puts
   end
 
   def lose
     puts "You lose the game!"
+    puts
+  end
+
+  def display
+    puts "#{@guess.join(' ')}" << " (#{@guesses_left.to_s} guesses left)"
+    puts "Past guesses: #{@guessed_characters.join(' ')}"
   end
 end
 
-def random_guess
-  (('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a).sample
+restart = 'y'
+while restart == 'y' do
+  hangman = Hangman.new
+  restart = hangman.start
 end
-
-hangman = Hangman.new
-p hangman.answer
-hangman.start
-
