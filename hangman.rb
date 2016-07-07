@@ -12,6 +12,12 @@ class Hangman
     puts "Past guesses: #{@guessed_characters.join(' ')}"
   end
 
+  def start
+    until gameover?
+      ask_to_guess
+    end
+  end
+
   def ask_to_guess
     input = '0'
     until valid_guess?(input) do
@@ -45,10 +51,24 @@ class Hangman
         @guess[i] = word
       end
     end
+    win unless @guess.include?('_')
     unless guess_right
       @guesses_left -= 1 
       @guessed_characters << input
+      lose if @guesses_left <= 0
     end
+  end
+
+  def gameover?
+    @guesses_left <= 0 || !@guess.include?('_')
+  end
+
+  def win
+    puts "You win the game!"
+  end
+
+  def lose
+    puts "You lose the game!"
   end
 end
 
@@ -58,7 +78,5 @@ end
 
 hangman = Hangman.new
 p hangman.answer
-hangman.ask_to_guess
-hangman.ask_to_guess
-hangman.ask_to_guess
+hangman.start
 
