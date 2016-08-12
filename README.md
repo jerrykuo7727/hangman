@@ -1,5 +1,5 @@
 # Hangman: guess the secret word!
-This is a Hangman game made with ruby
+A hangman game written in ruby.
 
-Try to guess a randomly generated word in 6 guesses.<br>
+<b>Rule:</b> Try to guess a randomly generated word in 6 guesses.<br>
 \# Command list: 'save', 'load', 'delete'   
