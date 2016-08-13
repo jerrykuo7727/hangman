@@ -13,6 +13,15 @@ h3 {
   font-size: 24px;
 }
 
+img {
+   height: 30%;
+   width: 30%;
+}
+
+p {
+  font-size: 24px;
+}
+
 .text, div {
   font-size: 24px;
 }
