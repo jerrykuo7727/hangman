@@ -1,5 +1,6 @@
 class Hangman
-  attr_reader :@guesses_left
+  attr_reader :guess, :guesses_left
+
   def initialize
     @answer = random_word
     @guesses_left = 6
@@ -13,7 +14,9 @@ class Hangman
       && !@guess.include?(input) && !@guessed_characters.include?(input)
   end
 
-  def guess(input)
+  def try_to_guess(input)
+    return nil unless input.class == String
+
     guess_right = false
     @answer.each_with_index do |word, i|
       if word.downcase == input
@@ -30,6 +33,10 @@ class Hangman
 
   def word
     @guess.join(' ')
+  end
+
+  def answer
+    @answer.join(' ')
   end
 
   def guessed_characters

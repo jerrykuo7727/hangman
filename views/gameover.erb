@@ -10,13 +10,9 @@
   <h1>猜單字遊戲</h1>
   <h3>請在吊死鬼完全現身前猜出下面的英文單字</h4>
   <img src="/image/<%= image_number %>.png">
-  <p class="word"><%= word %></p>
-  <form>
-    <div id="guess_form">
-      猜測：<input id="key" class="text" type='text' name="guess">
-      <input type='submit' value='送出'/>
-    </div>
-    <div id="guessed"><p> &nbsp; 猜過的字母：<%= guessed_characters %></p></div>
+  <p class="word"><%= answer %></p>
+  <form id="gameover">
+    <h3 class="gameover"><%= gameover_message %></h3>
+    <div><input type='submit' value='再來一局'/></div>
   </form>
-  
 </html>
