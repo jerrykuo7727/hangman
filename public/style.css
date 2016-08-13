@@ -1,0 +1,35 @@
+body {
+  background: LightYellow;
+  text-align: center;
+  font-family: 'cwTeXHei', sans-serif;
+}
+
+h1 {
+  margin-top: 50px;
+  font-size: 48px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+.text, div {
+  font-size: 24px;
+}
+
+input {
+  font-size: 18px;
+  margin-top: 12px;
+}
+
+#key {
+  width: 10%;
+  text-align: center;
+  margin-right: 12px;
+
+}
+
+a {
+  font-size: 18px;
+  font-weight: bolder;
+}

@@ -127,7 +127,7 @@ class Hangman
     puts "Past guesses: #{@guessed_characters.join(' ')}"
   end
 end
-
+=begin
 puts "***********************************"
 puts "* Hangman: guess the secret word! *"
 puts "*   # Below is the command list   *"
@@ -139,3 +139,4 @@ while restart == 'y' do
   restart = hangman.start
 end
 puts "Thank you for playing, bye-bye!"
+=end
