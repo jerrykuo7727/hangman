@@ -13,6 +13,7 @@ get '/' do
   end
 
   guess = params[:guess]
+  hangman = Hangman.new if guess.nil?
   hangman.try_to_guess(guess) if hangman.valid_guess?(guess)
 
   if !hangman.guess.include?('_')
